@@ -1,0 +1,88 @@
+{% extends "basehtml.html" %}
+{% block head %}
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Mark's Files</title>
+<link href="{{ static_file_url }}css/aboutme.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript">
+      function fileSelected() {
+        var file = document.getElementById('file1').files[0];
+        if (file) {
+          var fileSize = 0;
+          if (file.size > 1024 * 1024)
+            fileSize = (Math.round(file.size * 100 / (1024 * 1024)) / 100).toString() + 'MB';
+          else
+            fileSize = (Math.round(file.size * 100 / 1024) / 100).toString() + 'KB';
+
+          document.getElementById('fileName').innerHTML = 'Name: ' + file.name;
+          document.getElementById('fileSize').innerHTML = 'Size: ' + fileSize;
+          document.getElementById('fileType').innerHTML = 'Type: ' + file.type;
+        }
+      }
+
+      function uploadFile() {
+        var fd = new FormData();
+        fd.append("file1", document.getElementById('file1').files[0]);
+        var xhr = new XMLHttpRequest();
+        xhr.upload.addEventListener("progress", uploadProgress, false);
+        xhr.addEventListener("load", uploadComplete, false);
+        xhr.addEventListener("error", uploadFailed, false);
+        xhr.addEventListener("abort", uploadCanceled, false);
+        xhr.open("POST", "UploadMinimal.aspx");
+        xhr.send(fd);
+      }
+
+      function uploadProgress(evt) {
+        if (evt.lengthComputable) {
+          var percentComplete = Math.round(evt.loaded * 100 / evt.total);
+          document.getElementById('progressNumber').innerHTML = percentComplete.toString() + '%';
+        }
+        else {
+          document.getElementById('progressNumber').innerHTML = 'unable to compute';
+        }
+      }
+
+      function uploadComplete(evt) {
+        /* This event is raised when the server send back a response */
+        alert(evt.target.responseText);
+      }
+
+      function uploadFailed(evt) {
+        alert("There was an error attempting to upload the file.");
+      }
+
+      function uploadCanceled(evt) {
+        alert("The upload has been canceled by the user or the browser dropped the connection.");
+      }
+    </script>
+{% endblock %}
+
+{% block content %}
+<div id="container" align="center">
+	<div id="header">
+        <div id="header_content" class="locate_center" align="center" style="padding:20px;">UPLOAD A FILE: the size of the file shouldn't be larger than 9 MB
+        </div>
+    </div>
+	<p>&nbsp</p>
+	<form id="form1" ENCTYPE="multipart/form-data" ACTION="" METHOD="post" >
+		<input name="file1" type="file" id="file1" onchange="fileSelected();" />
+		<input type="submit" value="upload" onclick="uploadFile();" />
+	</form>
+	<p> </p>
+	{{ notice }}
+	<p></p>
+	name:<div id="fileName">name</div>
+	size:<div id="fileSize">size</div>
+	type:<div id="fileType">type</div>
+	progress:<div id="progressNumber"></div>
+</div>
+{% endblock %}
+<!--foot-->
+{% block foot %}
+<div id="foot">
+    <div id="foot_content">
+        Mark Sheng 2012
+        <div id="footRight">
+        </div>
+    </div>
+</div>
+{% endblock %}

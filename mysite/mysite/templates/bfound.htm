@@ -1,0 +1,144 @@
+{% extends "bbase.htm" %} 
+{% block content %}
+{# bitwormhole_name time_limit size_limit download_list #}
+   <div class="container">
+
+      <!-- Main hero unit for a primary marketing message or call to action -->
+      <div class="hero-unit well" style="background:url('http://qxdh-static.stor.sinaapp.com/hdbg.jpg')">
+        <h1>{{ head_info }} <span id="wormhole_name">{{ bitwormhole_name }}</span></h1><p />
+        <p>
+        <div>
+            <input type="text" class="input-xlarge" id="another" style="margin-top:10px;" placeholder="如果您需要新建一条虫洞，请尝试其他虫洞名"/>
+            <a class="btn btn-primary" id="jump2another">跳到 &raquo;</a></p>
+        </div>
+	  
+	<div id="note_block" style="background-color:#55555555">	
+<!--		<textarea placeholder="虫洞铭刻" class="input-block-level"></textarea>
+		<div style="position:absolute"><a class="btn" style="position:relative;" id="change_note">修改铭刻</a></div>
+-->
+<!--		<div id="note_content">虫洞铭刻</div>
+		<div class="block" style="position:absolute;"><a class="btn" id="change_note" style="float:right;">修改</a></div>
+-->      	</div>
+	</div>
+
+      <div class="row">
+        <div class="span6">
+            <div class="well">
+                <h2>上传文件</h2><p />
+
+                <form method="post" action="" id="upload_form" enctype="multipart/form-data" class="form-horizontal">
+                    <fieldset>
+                      <div class="control-group">
+                        <label class="control-label" for="keyword">下载口令</label>
+                        <div class="controls">
+                          <input type="password" class="input-xlarge" id="keyword" name="keyword">
+                          <p class="help-block" id="keywordinfo">
+		                  如果为空，则任何人可以下载
+	                      </p>
+                        </div>
+                      </div>
+                      <div class="control-group">
+                        <label class="control-label" for="file">上传文件</label>
+                        <div class="controls">
+                          <input class="input-file" name="file" id="file" type="file">
+				<p class="help-block" id="file_notice">
+		                  提示：最大支持1G文件上传，请合理使用
+				</p>
+				<div id="progress_info">
+                        		<div id="progress"></div>
+                        		<div id="progress_percent">&nbsp;</div>
+                        		<div class="clear_both"></div>
+                        		<div>
+                            			<div id="speed">&nbsp;</div>
+                            			<div id="remaining">&nbsp;</div>
+                            			<div id="b_transfered">&nbsp;</div>
+                            			<div class="clear_both"></div>
+                        		</div>
+                    		</div>
+                        </div>
+                      </div>
+                      <div class="control-group">
+                        <label class="control-label" for="describe">文件备注</label>
+                        <div class="controls">
+                          <textarea class="input-xlarge" id="describe" rows="3" name="describe" placeholder="最多128字"></textarea>
+                        </div>
+                      </div>
+					  <!--<div class="control-group">
+						<label class="control-label" for="file">附加选项</label>
+					  	<label class="checkbox controls" style="margin-top:5px;">
+							<input type="checkbox" name="share" id="share">分享到人人网公共主页
+					  	</label>
+					  </div>-->
+                      <div class="form-actions">
+                      <input type="hidden" name="bitwormhole_name" value="{{ bitwormhole_name }}" />
+                      <input type="hidden" name="user_ip" id="user_ip" value="{{ user_ip }}" /> 
+                      <input id="submit" type="button" class="btn btn-primary" onclick="startUploading()" value="确认上传" />
+                        &nbsp;&nbsp;&nbsp;<button class="btn">取消</button>
+                      </div>
+                    </fieldset>
+                  </form>
+            </div>
+          <div class="alert alert-block">
+            <a class="close" data-dismiss="alert">×</a>
+            <h4 class="alert-heading">提示：{{ notice_head }}单个文件最大为{{ size_limit }}MB</h4>
+            这条的虫洞地址为：{{ domain_url }}{{ bitwormhole_name }}</br>
+                上传不合法内容将导致虫洞被关闭。关闭后，所有比特将会被黑洞吸走，永远不可恢复。这条虫洞也会等待新的发现者
+          </div>
+
+	</div>
+
+        <div class="span6">
+          <div class="well">
+              <h2>已有的文件 <a name="xn_share" onclick="shareClick()" type="button_medium" href="javascript:;"></a></h2><p />
+              <div id="downloadlist">
+                  <div class="accordion" id="accordion2">
+                      <div class="accordion-group">
+			{% for file in download_list %}
+			<div class="accordion-heading">
+				<p class="accordion-toggle" style="color:#0088cc;cursor:pointer" data-toggle="collapse" data-parent="#accordion2" href="#collapse{{ file.id }}">
+					{{ file.name }}
+					{% if is_founder %}
+						<a type="button" id="filedel{{ file.id }}"
+							onclick="filedel({{ file.id }})" style="float:right;" >删除</a>
+					{% endif %}
+				</p>
+			</div>
+			<div id="collapse{{file.id}}" class="accordion-body collapse">
+				<div class="accordion-inner">
+					{% if file.need_key %}
+						请输入密码:<input type="password" id="filekey{{ file.id }}" /> 
+						<input type="button" value="下载" onclick='
+
+                                                            var head = "{{ download_link_head }}";
+                                                            var end = "{{ file.name }}";
+                                                            var key = document.getElementById("filekey{{ file.id }}").value;
+                                                            var body = hex_md5(key);
+                                                            body = body.substring(0,16);
+                                                            if(body.length!=0)
+                                                                    window.location.href=head+body+"_"+end;
+
+                                                '/><br />
+                                                备注：{{ file.add }}<br />
+						上传时间：{{ file.time }}
+					{% else %}
+						点击<a href="{{ file.link }}">此处</a>下载,或使用
+		<a href="https://chart.googleapis.com/chart?cht=qr&chs=150x150&choe=UTF-8&chld=L|4&chl={{ file.link }}">二维码</a><br />
+                                                备注：{{ file.add }}<br />
+						上传时间：{{ file.time }}
+					{% endif %}
+				</div>
+			</div>
+
+			{% endfor %}
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>     
+
+      <footer class="span12">
+        <p>Copyright&copy;2013 &nbsp;BitWormhole.com&nbsp;&nbsp;比特虫洞&nbsp;</p>
+      </footer>
+
+    </div> <!-- /container -->
+{% endblock %}

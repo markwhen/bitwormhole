@@ -1,0 +1,33 @@
+<VirtualHost *:80>
+	ServerAdmin admin@bitwormhole.com
+	ServerName bitwormhole.com
+	ServerAlias www.bitwormhole.com thu.bitwormhole.com
+	DocumentRoot /home/pi/mysite
+
+	#mod_wsgi settings
+	WSGIDaemonProcess mysite python-path=/home/pi/mysite:/home/pi/.virtualenv
+	WSGIProcessGroup mysite
+	WSGIScriptAlias / /home/pi/mysite/mysite/wsgi.py
+	
+	#static file alias so static files can be referenced by /static/
+	#Alias /static/ /home/pi/mysite/static/
+
+	#static files permissions
+	#Used for serving static files.
+	<Directory /home/pi/mysite/static>
+		Order deny,allow
+		Allow from all
+	</Directory>
+
+	#Project wsgi permissions
+	#Used for serving django pages
+	<Directory /home/pi/mysite/mysite>
+		<Files wsgi.py>
+			Order deny,allow
+			Allow from all
+		</Files>
+                LimitRequestBody 1073741824
+		RLimitMEM        200000000
+	</Directory>
+	
+</VirtualHost>

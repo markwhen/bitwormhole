@@ -1,0 +1,45 @@
+{% extends "bbase.htm" %} 
+{% block content %}
+    <div class="container">
+
+      <!-- Main hero unit for a primary marketing message or call to action -->
+      <div class="hero-unit well">
+        <h1>欢迎来到 比特虫洞</h1><p />
+        <p>比特虫洞（BitWormhole.com）是帮你传输文件的快速通道，你也可以用它来向好友分享文件</p>
+        <div>
+            <input type="text" class="input-xlarge" id="another" style="margin-top:10px;" placeholder="输入一个虫洞名，你就可以使用它！"/>
+            <a class="btn btn-primary" id="jump2another">进入虫洞 &raquo;</a>
+            <span style="color:#555555;position:relative;top:3px;">&nbsp;&nbsp;试试：movie,编程,Linux,金融工程,Mathematica</span><p/>
+        </div>
+        <div class="alert alert-success">
+            <a class="close" data-dismiss="alert">×</a>
+            <h4 class="alert-heading">虫洞特性</h4>
+            你可以以最快的速度创建或打开一条虫洞，虫洞可以帮你传递大小不超过1000M的文件。
+        </div>
+        <div class="alert alert-info">
+            <a class="close" data-dismiss="alert">×</a>
+            <h4 class="alert-heading">使用方法</h4>
+            在上面输入框创建或进入一条虫洞，或者直接用浏览器访问（例如在地址栏输入 bitwormhole.com/example），然后上传你的文件。
+        </div>
+        <div class="alert alert-error">
+            <a class="close" data-dismiss="alert">×</a>
+            <h4 class="alert-heading">使用须知</h4>
+            希望你注意，上传违法或侵权内容将可能导致虫洞被关闭。<br />
+            关闭后，这条虫洞会清空，所有比特将会被黑洞吸走，永远不可恢复。其他人可以重新开启使用这条虫洞。
+        </div>
+	    <div class="alert alert-block">
+            <a class="close" data-dismiss="alert">×</a>
+            <h4 class="alert-heading">安全性</h4>
+            您可以通过口令锁住自己上传的隐私文件，这样只有掌握口令的人能够打开此文件。
+        </div>
+	    <br />
+
+        <p><a class="btn btn-primary btn-large " onclick="alert('请参考本页提示');">使用指南 &raquo;</a>&nbsp;&nbsp;&nbsp;
+	<a class="btn btn-large" onclick="alert('起草中');">用户协议 &raquo;</a></p>
+      </div>
+      <footer class="span12">
+        <p>Copyright&copy;2013 &nbsp;BitWormhole.com&nbsp;&nbsp;比特虫洞&nbsp;</p>
+      </footer>
+
+    </div> <!-- /container -->
+{% endblock %}

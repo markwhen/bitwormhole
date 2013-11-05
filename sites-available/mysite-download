@@ -1,0 +1,40 @@
+<VirtualHost *:80>
+	ServerAdmin admin@bitwormhole.com
+	ServerName res.bitwormhole.com
+	DocumentRoot /home/pi/storage/mysite-download
+
+	#mod_wsgi settings
+	#WSGIDaemonProcess mysite python-path=/home/pi/mysite:/home/pi/.virtualenv
+	#WSGIProcessGroup mysite
+	#WSGIScriptAlias / /home/pi/mysite/mysite/wsgi.py
+	
+	#static file alias so static files can be referenced by /static/
+	#Alias /static/ /home/pi/mysite/static/
+
+	#static files permissions
+	#Used for serving static files.
+	<Directory /home/pi/storage/mysite-download>
+		Options MultiViews SymLinksIfOwnerMatch IncludesNoExec
+		Order deny,allow
+		Deny from all
+		#Allow from all
+		Allow from 59.66.0.0/16
+                Allow from 101.5.0.0/16
+                Allow from 101.6.0.0/16
+                Allow from 106.120.132.0/22
+                Allow from 118.229.0.0/19
+                Allow from 166.111.0.0/16
+                Allow from 183.172.0.0/16
+                Allow from 183.173.0.0/16
+                
+	</Directory>
+
+	#Project wsgi permissions
+	#Used for serving django pages
+	#<Directory /home/pi/mysite/mysite>
+	#	<Files wsgi.py>
+	#		Order deny,allow
+	#		Allow from all
+	#	</Files>
+	#</Directory>
+</VirtualHost>
